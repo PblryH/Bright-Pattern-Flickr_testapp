@@ -5,7 +5,11 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,13 +21,8 @@ import bright.pattern.flickr.domain.model.Photo
 import bright.pattern.flickr.std.observeViewState
 import bright.pattern.flickr.std.showAlertDialog
 import bright.pattern.flickr.std.viewbindings.viewBinding
+import bright.pattern.flickr.ui.EndlessRecyclerViewScrollListener
 import bright.pattern.flickr.ui.screen.photossearch.adapter.PhotosAdapter
-import android.view.Menu
-
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.SearchView
 
 
 class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
@@ -52,7 +51,8 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.recycler.layoutManager = GridLayoutManager(requireContext(), 2)
+        val layoutManager = GridLayoutManager(requireContext(), 2)
+        views.recycler.layoutManager = layoutManager
         val gridMargin = 8.toPx.toInt()
         views.recycler.addItemDecoration(object : ItemDecoration() {
             override fun getItemOffsets(
@@ -61,6 +61,13 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
                 outRect.set(gridMargin, gridMargin, gridMargin, gridMargin)
             }
         })
+
+        val scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.onLoadMore(page, totalItemsCount)
+            }
+        }
+        views.recycler.addOnScrollListener(scrollListener)
 
         adapter = PhotosAdapter(mutableListOf())
         views.recycler.adapter = adapter
@@ -89,7 +96,7 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
         val menuItem = menu.findItem(R.id.action_search)
         val searchView = menuItem.actionView as SearchView
         searchView.queryHint = "Search something"
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.onQuerySubmit(query ?: "")
                 return false
@@ -105,6 +112,7 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
     }
 
     private fun clearPhotos() {
+        views.recycler.scrollToPosition(0)
         adapter.clearItems()
     }
 

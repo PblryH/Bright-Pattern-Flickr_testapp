@@ -31,7 +31,7 @@ class PhotosAdapter(private var photos: MutableList<Photo>) :
         Glide.with(holder.itemView)
             .load(photos[position].link)
             .fitCenter()
-//            .thumbnail(if (thumbnail) thumbnailRequest.load(current) else null)
+//            .placeholder(R.drawable.ic_outline_image_24) // Uncomment to set placeholder
             .into(holder.imageView)
     }
 
