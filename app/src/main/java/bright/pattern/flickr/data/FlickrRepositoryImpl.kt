@@ -7,8 +7,11 @@ import bright.pattern.flickr.domain.repository.FlickrRepository
 
 class FlickrRepositoryImpl(private val api: FlickrApi) : FlickrRepository {
 
-    override suspend fun getPhotos(query: String, page: Int): List<Photo> =
-        api.getPhotos(query, page).await().photos.photoList.map { it.toDomainPhoto() }
+    override suspend fun getPhotos(query: String, page: Int): List<Photo> {
+        var newQuery = "-"
+        if(query != "") newQuery = query
+        return api.getPhotos(newQuery, page).await().photos.photoList.map { it.toDomainPhoto() }
+    }
 
 }
 

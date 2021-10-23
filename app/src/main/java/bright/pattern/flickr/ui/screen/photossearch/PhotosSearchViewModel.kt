@@ -1,5 +1,6 @@
 package bright.pattern.flickr.ui.screen.photossearch
 
+import android.app.DownloadManager
 import androidx.lifecycle.viewModelScope
 import bright.pattern.flickr.domain.model.Photo
 import bright.pattern.flickr.domain.repository.RequestState
@@ -17,12 +18,14 @@ import timber.log.Timber
 class PhotosSearchViewModel(private val photosSearchUseCase: PhotosSearchUseCase) :
     ViewStateModel<PhotosSearchVS>() {
 
+    private var query: String = ""
+
     init {
         search(true)
     }
 
     private fun search(needToRefresh: Boolean) {
-        photosSearchUseCase().onEach { state ->
+        photosSearchUseCase(query).onEach { state ->
             Timber.d("photosSearchUseCase state:$state")
             when (state) {
                 is RequestState.Success -> updateViewState(PhotosSearchVS.ShowPhotos(state.data, needToRefresh))
@@ -38,6 +41,15 @@ class PhotosSearchViewModel(private val photosSearchUseCase: PhotosSearchUseCase
 
     fun onRefresh() {
         search(true)
+    }
+
+    fun onQuerySubmit(query: String) {
+        this.query = query
+        search(true)
+    }
+
+    fun onQueryChange(query: String) {
+        this.query = query
     }
 
 }

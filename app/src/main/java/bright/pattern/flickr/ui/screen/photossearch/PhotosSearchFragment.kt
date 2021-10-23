@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,6 +18,13 @@ import bright.pattern.flickr.std.observeViewState
 import bright.pattern.flickr.std.showAlertDialog
 import bright.pattern.flickr.std.viewbindings.viewBinding
 import bright.pattern.flickr.ui.screen.photossearch.adapter.PhotosAdapter
+import android.view.Menu
+
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.ViewGroup
+import android.widget.SearchView
+
 
 class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
 
@@ -30,6 +38,15 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
 
     companion object {
         fun newInstance() = PhotosSearchFragment()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setHasOptionsMenu(true)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,16 +69,39 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
             viewModel.onRefresh()
         }
 
-        viewModel.viewStateLiveData.observeViewState(this){stateElement ->
-            when(stateElement){
+        viewModel.viewStateLiveData.observeViewState(this) { stateElement ->
+            when (stateElement) {
                 is PhotosSearchVS.Progress -> setProgressVisibility(stateElement.isLoading)
-                is PhotosSearchVS.ShowDialog -> showAlertDialog(requireContext(), stateElement.dialog)
+                is PhotosSearchVS.ShowDialog -> showAlertDialog(
+                    requireContext(),
+                    stateElement.dialog
+                )
                 is PhotosSearchVS.ShowPhotos -> {
-                    if(stateElement.isRefreshed) clearPhotos()
+                    if (stateElement.isRefreshed) clearPhotos()
                     addPhotos(stateElement.photos)
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu, menu)
+        val menuItem = menu.findItem(R.id.action_search)
+        val searchView = menuItem.actionView as SearchView
+        searchView.queryHint = "Search something"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.onQuerySubmit(query ?: "")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.onQueryChange(newText ?: "")
+                return false
+            }
+
+        })
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun clearPhotos() {
@@ -79,7 +119,9 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
 
 }
 
-val Number.toPx get() = TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_DIP,
-    this.toFloat(),
-    Resources.getSystem().displayMetrics)
+val Number.toPx
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    )
