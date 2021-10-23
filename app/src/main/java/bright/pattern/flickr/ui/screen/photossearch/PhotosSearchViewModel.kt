@@ -18,14 +18,14 @@ class PhotosSearchViewModel(private val photosSearchUseCase: PhotosSearchUseCase
     ViewStateModel<PhotosSearchVS>() {
 
     init {
-        search()
+        search(true)
     }
 
-    private fun search() {
+    private fun search(needToRefresh: Boolean) {
         photosSearchUseCase().onEach { state ->
             Timber.d("photosSearchUseCase state:$state")
             when (state) {
-                is RequestState.Success -> updateViewState(PhotosSearchVS.ShowPhotos(state.data))
+                is RequestState.Success -> updateViewState(PhotosSearchVS.ShowPhotos(state.data, needToRefresh))
                 is RequestState.Error -> updateViewState(PhotosSearchVS.ShowDialog(
                     Dialog(state.e.message  ?: "An unexpected error occurred",
                         positive = DialogButton(DialogButtonName.OK) {},
@@ -36,13 +36,17 @@ class PhotosSearchViewModel(private val photosSearchUseCase: PhotosSearchUseCase
         }.launchIn(viewModelScope)
     }
 
+    fun onRefresh() {
+        search(true)
+    }
+
 }
 
 
 sealed class PhotosSearchVS(key: String, strategy: Strategy) :
     ViewStateElement(key, strategy) {
 
-    data class ShowPhotos(val photos: List<Photo>) :
+    data class ShowPhotos(val photos: List<Photo>, val isRefreshed: Boolean = false) :
         PhotosSearchVS("ShowPhotos", Strategy.COMMAND)
 
     data class ShowDialog(val dialog: Dialog) :

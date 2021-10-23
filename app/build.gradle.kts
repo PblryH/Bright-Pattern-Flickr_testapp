@@ -63,6 +63,7 @@ dependencies {
         exclude(group = "com.android.support")
     }
     implementation("com.android.support:support-fragment:26.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 
     testImplementation (TestLibs.junit)

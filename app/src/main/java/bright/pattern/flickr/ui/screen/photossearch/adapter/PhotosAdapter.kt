@@ -43,4 +43,9 @@ class PhotosAdapter(private var photos: MutableList<Photo>) :
         notifyItemRangeInserted(start, items.size)
     }
 
+    fun clearItems() {
+        photos.clear()
+        notifyDataSetChanged()
+    }
+
 }

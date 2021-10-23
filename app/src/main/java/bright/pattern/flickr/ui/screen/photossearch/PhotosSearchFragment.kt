@@ -48,13 +48,24 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
         adapter = PhotosAdapter(mutableListOf())
         views.recycler.adapter = adapter
 
+        views.swipeToRefresh.setOnRefreshListener {
+            viewModel.onRefresh()
+        }
+
         viewModel.viewStateLiveData.observeViewState(this){stateElement ->
             when(stateElement){
                 is PhotosSearchVS.Progress -> setProgressVisibility(stateElement.isLoading)
                 is PhotosSearchVS.ShowDialog -> showAlertDialog(requireContext(), stateElement.dialog)
-                is PhotosSearchVS.ShowPhotos -> addPhotos(stateElement.photos)
+                is PhotosSearchVS.ShowPhotos -> {
+                    if(stateElement.isRefreshed) clearPhotos()
+                    addPhotos(stateElement.photos)
+                }
             }
         }
+    }
+
+    private fun clearPhotos() {
+        adapter.clearItems()
     }
 
     private fun addPhotos(photos: List<Photo>) {
@@ -62,7 +73,8 @@ class PhotosSearchFragment : Fragment(R.layout.photo_search_fragment) {
     }
 
     private fun setProgressVisibility(isVisible: Boolean) {
-        views.progress.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+        views.swipeToRefresh.isRefreshing = isVisible
+//        views.progress.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 
 }
