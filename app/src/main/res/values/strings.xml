@@ -12,5 +12,12 @@
     <string name="continue_">Continue</string>
 
     <string name="search">Search</string>
+    <string name="downloading">Downloading...</string>
+    <string name="search_hint">Search something</string>
+    <string name="unexpected_error">An unexpected error occurred</string>
+    <string name="error_connection">Can not connect to server</string>
+    <string name="downloading_has_been_started">Downloading has been started</string>
+    <string name="file_has_been_downloaded">File %s has been successfully downloaded</string>
+    <string name="item_content_description" translatable="false">ItemImage</string>
 
 </resources>

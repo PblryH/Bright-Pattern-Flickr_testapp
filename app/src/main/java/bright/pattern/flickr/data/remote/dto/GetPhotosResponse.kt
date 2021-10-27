@@ -2,6 +2,7 @@ package bright.pattern.flickr.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 import bright.pattern.flickr.domain.model.Photo as DomainPhoto
+import bright.pattern.flickr.domain.model.PagedPhotos as DomainPagedPhotos
 
 data class GetPhotosResponse(
     @SerializedName("photos")
@@ -45,6 +46,13 @@ data class Photo(
 )
 
 fun Photo.toDomainPhoto(): DomainPhoto = DomainPhoto(
-        title = this.title,
-        link = "https://live.staticflickr.com/$server/${id}_${secret}_w.jpg"
-    )
+    id = this.id,
+    title = this.title,
+    link = "https://live.staticflickr.com/$server/${id}_${secret}_w.jpg"
+)
+
+fun Photos.toDomainPagedPhotos(): DomainPagedPhotos = DomainPagedPhotos(
+    this.page,
+    this.pages,
+    this.photoList.map { it.toDomainPhoto() }
+)
