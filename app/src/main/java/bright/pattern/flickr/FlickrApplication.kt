@@ -10,7 +10,7 @@ class FlickrApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         plantTimberForest()
-        AppComponent.instance = ComponentsResolver()
+        AppComponent.instance = ComponentsResolver(this)
     }
 
     private fun plantTimberForest() {

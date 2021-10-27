@@ -40,8 +40,8 @@ enum class Strategy {
 }
 
 inline fun <T : ViewStateElement> LiveData<ViewState<T>>
-        .observeViewState(lifecycleOwner: LifecycleOwner, crossinline onHandleContent: (T) -> Unit) {
-    var alreadyStateInit = false
+        .observeViewState(lifecycleOwner: LifecycleOwner, isStateInit:Boolean = false, crossinline onHandleContent: (T) -> Unit): Boolean {
+    var alreadyStateInit = isStateInit
     observe(lifecycleOwner, Observer {
         it?.states?.mapNotNull { element ->
             if (alreadyStateInit) {
@@ -55,4 +55,5 @@ inline fun <T : ViewStateElement> LiveData<ViewState<T>>
             }
         }?.also { alreadyStateInit = true }?.forEach(onHandleContent)
     })
+    return true
 }

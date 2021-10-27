@@ -12,7 +12,8 @@ interface FlickrApi {
     fun getPhotos(
         @Query("text") query: String = "-",
         @Query("page") page: Int,
-        @Query("per_page") perPage: Int = 20
+        @Query("per_page") perPage: Int = 20,
+        @Query("max_upload_date") maxUploadDate: Long = 0
     ): Deferred<GetPhotosResponse>
 
 }

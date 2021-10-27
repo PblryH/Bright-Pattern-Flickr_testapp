@@ -2,6 +2,7 @@ package bright.pattern.flickr.ui.screen.photossearch
 
 import bright.pattern.flickr.di.appComponent
 import bright.pattern.flickr.domain.usecase.PhotosSearchUseCase
+import bright.pattern.flickr.std.ResourcesProvider
 import bright.pattern.flickr.std.ViewModelFactory
 import bright.pattern.flickr.std.viewModelCreator
 
@@ -17,7 +18,9 @@ object PhotosSearchModule: PhotosSearchComponent {
 
     override val viewModelFactory: ViewModelFactory by lazy { ViewModelFactory(viewModelCreator(vm)) }
 
-    private val vm: PhotosSearchViewModel by lazy { PhotosSearchViewModel(photosSearchUseCase) }
+    private val resourcesProvider: ResourcesProvider by lazy { ResourcesProvider.AndroidResourcesProvider(appComponent().context) }
+
+    private val vm: PhotosSearchViewModel by lazy { PhotosSearchViewModel(photosSearchUseCase, resourcesProvider) }
 
     private val photosSearchUseCase: PhotosSearchUseCase by lazy { PhotosSearchUseCase(repository) }
 

@@ -6,6 +6,8 @@ plugins {
     id("dependencies")
     id("com.android.application")
     id("kotlin-android")
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -63,6 +65,10 @@ dependencies {
         exclude(group = "com.android.support")
     }
     implementation("com.android.support:support-fragment:26.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
 
     testImplementation (TestLibs.junit)
