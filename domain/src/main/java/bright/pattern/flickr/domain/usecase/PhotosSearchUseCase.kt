@@ -1,12 +1,10 @@
 package bright.pattern.flickr.domain.usecase
 
-import android.util.Log
-import bright.pattern.flickr.domain.repository.RequestState
 import bright.pattern.flickr.domain.model.Photo
 import bright.pattern.flickr.domain.repository.FlickrRepository
+import bright.pattern.flickr.domain.repository.RequestState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlin.Exception
 
 /**
  * Performs search of photos
