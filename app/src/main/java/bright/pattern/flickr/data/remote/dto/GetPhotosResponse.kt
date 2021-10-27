@@ -1,5 +1,6 @@
 package bright.pattern.flickr.data.remote.dto
 
+import bright.pattern.flickr.FlickrApiProperties.PHOTO_LINK_FORMAT
 import com.google.gson.annotations.SerializedName
 import bright.pattern.flickr.domain.model.Photo as DomainPhoto
 import bright.pattern.flickr.domain.model.PagedPhotos as DomainPagedPhotos
@@ -48,7 +49,7 @@ data class Photo(
 fun Photo.toDomainPhoto(): DomainPhoto = DomainPhoto(
     id = this.id,
     title = this.title,
-    link = "https://live.staticflickr.com/$server/${id}_${secret}_w.jpg"
+    link = String.format(PHOTO_LINK_FORMAT,server,id,secret)
 )
 
 fun Photos.toDomainPagedPhotos(): DomainPagedPhotos = DomainPagedPhotos(
