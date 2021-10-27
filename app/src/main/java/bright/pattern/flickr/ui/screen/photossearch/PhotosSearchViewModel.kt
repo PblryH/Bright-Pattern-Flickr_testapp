@@ -1,0 +1,54 @@
+package bright.pattern.flickr.ui.screen.photossearch
+
+import androidx.lifecycle.viewModelScope
+import bright.pattern.flickr.domain.model.Photo
+import bright.pattern.flickr.domain.repository.RequestState
+import bright.pattern.flickr.domain.usecase.PhotosSearchUseCase
+import bright.pattern.flickr.std.Dialog
+import bright.pattern.flickr.std.DialogButton
+import bright.pattern.flickr.std.DialogButtonName
+import bright.pattern.flickr.std.Strategy
+import bright.pattern.flickr.std.ViewStateElement
+import bright.pattern.flickr.std.ViewStateModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
+
+class PhotosSearchViewModel(private val photosSearchUseCase: PhotosSearchUseCase) :
+    ViewStateModel<PhotosSearchVS>() {
+
+    init {
+        search()
+    }
+
+    private fun search() {
+        photosSearchUseCase().onEach { state ->
+            Timber.d("photosSearchUseCase state:$state")
+            when (state) {
+                is RequestState.Success -> updateViewState(PhotosSearchVS.ShowPhotos(state.data))
+                is RequestState.Error -> updateViewState(PhotosSearchVS.ShowDialog(
+                    Dialog(state.e.message  ?: "An unexpected error occurred",
+                        positive = DialogButton(DialogButtonName.OK) {},
+                    )
+                ))
+                is RequestState.Progress -> updateViewState(PhotosSearchVS.Progress(state.isLoading))
+            }
+        }.launchIn(viewModelScope)
+    }
+
+}
+
+
+sealed class PhotosSearchVS(key: String, strategy: Strategy) :
+    ViewStateElement(key, strategy) {
+
+    data class ShowPhotos(val photos: List<Photo>) :
+        PhotosSearchVS("ShowPhotos", Strategy.COMMAND)
+
+    data class ShowDialog(val dialog: Dialog) :
+        PhotosSearchVS("ShowDialog", Strategy.COMMAND)
+
+    data class Progress(val isLoading: Boolean) :
+        PhotosSearchVS("Progress", Strategy.STATE)
+
+}

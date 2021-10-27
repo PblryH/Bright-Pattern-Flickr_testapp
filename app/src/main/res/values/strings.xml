@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">TestApp</string>
+
+    <string name="restore">Restore</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+    <string name="exit">Exit</string>
+    <string name="finish">Finish</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="continue_">Continue</string>
+
+</resources>
