@@ -48,5 +48,5 @@ The app should be entirely written by yourself; the contents of your project wil
 1. unit tests
 2. while image loading display loading indicator, but common loading indicator was implemented.
 
-## Mocking data
+## Mock data
 Select one of the Build Variant to use mocked or prod implementation of repository.
