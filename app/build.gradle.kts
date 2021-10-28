@@ -39,6 +39,18 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    flavorDimensions.add("remoteDataType")
+
+    productFlavors {
+        create("localMock"){
+            dimension = "remoteDataType"
+        }
+        create("apiProd"){
+            dimension = "remoteDataType"
+        }
+    }
+
 }
 
 dependencies {
