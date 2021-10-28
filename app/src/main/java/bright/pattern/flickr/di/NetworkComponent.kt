@@ -2,7 +2,9 @@ package bright.pattern.flickr.di
 
 import bright.pattern.flickr.BuildConfig
 import bright.pattern.flickr.FlickrApiProperties
+import bright.pattern.flickr.FlickrApiProperties.REQUEST_TIMEOUT_IN_SECONDS
 import bright.pattern.flickr.data.FlickrRepositoryImpl
+import bright.pattern.flickr.data.remote.ApiInterceptor
 import bright.pattern.flickr.data.remote.FlickrApi
 import bright.pattern.flickr.domain.repository.FlickrRepository
 import com.google.gson.*
@@ -30,11 +32,12 @@ interface NetworkComponent {
 
 class NetworkModule: NetworkComponent {
 
-    private val timeOut: Long = 60
+    private val timeOut: Long = REQUEST_TIMEOUT_IN_SECONDS
 
     private val client = OkHttpClient.Builder()
         .writeTimeout(timeOut, TimeUnit.SECONDS)
         .readTimeout(timeOut, TimeUnit.SECONDS)
+        .addInterceptor(ApiInterceptor())
         .addLoggingInterceptor()
         .build()
 

@@ -15,10 +15,13 @@ object Libs {
         private const val appcompatVersion = "1.3.1"
         private const val coreKtxVersion = "1.6.0"
         private const val fragmentKtxVersion = "1.3.6"
+        private const val navigationFragmentVersion = "2.3.5"
 
         const val appcompat = "androidx.appcompat:appcompat:$appcompatVersion"
         const val coreKtx = "androidx.core:core-ktx:$coreKtxVersion"
         const val fragmentKtx = "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
+        const val navigationFragment = "androidx.navigation:navigation-fragment-ktx:$navigationFragmentVersion"
+        const val navigationUI = "androidx.navigation:navigation-ui-ktx:$navigationFragmentVersion"
     }
 
     object Kotlin {
@@ -48,14 +51,20 @@ object Libs {
 
     object UI {
         private const val androidMaterialVersion = "1.4.0"
+        private const val glideVersion = "4.11.0"
 
         const val androidMaterial = "com.google.android.material:material:$androidMaterialVersion"
+        const val glide = "com.github.bumptech.glide:glide:$glideVersion"
+
 
         object AndroidX {
             private const val constraintLayoutVersion = "2.1.1"
+            private const val swiperefreshlayoutVersion = "1.1.0"
 
             const val constraintLayout =
-                "androidx.constraintlayout:constraintlayout:${AndroidX.constraintLayoutVersion}"
+                "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+            const val swiperefreshlayout =
+                "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshlayoutVersion"
         }
     }
 

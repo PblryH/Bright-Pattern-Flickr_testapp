@@ -46,6 +46,8 @@ dependencies {
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appcompat)
     implementation(Libs.AndroidX.fragmentKtx)
+    implementation(Libs.AndroidX.navigationFragment)
+    implementation(Libs.AndroidX.navigationUI)
     implementation(Libs.Kotlin.coroutinesCore)
     implementation(Libs.Kotlin.coroutinesAndroid)
     implementation(Libs.MVVM.AndroidX.livedataKtx)
@@ -59,16 +61,9 @@ dependencies {
     implementation(Libs.Network.retrofit2ConverterGson)
     implementation(Libs.Network.retrofit2KotlinCoroutinesAdapter)
     implementation(Libs.UI.androidMaterial)
+    implementation(Libs.UI.glide) { exclude(group = "com.android.support") }
     implementation(Libs.UI.AndroidX.constraintLayout)
-
-    implementation("com.github.bumptech.glide:glide:4.11.0") {
-        exclude(group = "com.android.support")
-    }
-    implementation("com.android.support:support-fragment:26.1.0")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation(Libs.UI.AndroidX.swiperefreshlayout)
 
 
     testImplementation (TestLibs.junit)
